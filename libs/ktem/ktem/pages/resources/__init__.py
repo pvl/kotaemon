@@ -8,6 +8,7 @@ from ktem.rerankings.ui import RerankingManagement
 from sqlmodel import Session, select
 
 from .user import UserManagement
+from .promptlib import PromptsManagement
 
 
 class ResourcesTab(BasePage):
@@ -27,6 +28,9 @@ class ResourcesTab(BasePage):
 
         with gr.Tab("Rerankings") as self.rerank_management_tab:
             self.rerank_management = RerankingManagement(self._app)
+
+        with gr.Tab("Prompts") as self.prompts_management_tab:
+            self.prompts_management = PromptsManagement(self._app)
 
         if self._app.f_user_management:
             with gr.Tab("Users", visible=False) as self.user_management_tab:

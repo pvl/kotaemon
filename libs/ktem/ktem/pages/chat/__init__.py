@@ -27,6 +27,7 @@ from .chat_panel import ChatPanel
 from .common import STATE
 from .control import ConversationControl
 from .report import ReportIssue
+from .promptlib import PromptLibrary
 
 DEFAULT_SETTING = "(default)"
 INFO_PANEL_SCALES = {True: 8, False: 4}
@@ -91,6 +92,7 @@ class ChatPage(BasePage):
 
             with gr.Column(scale=1, elem_id="conv-settings-panel") as self.conv_column:
                 self.chat_control = ConversationControl(self._app)
+                self.promptlib = PromptLibrary(self._app)
 
                 for index_id, index in enumerate(self._app.index_manager.indices):
                     index.selector = None
@@ -183,6 +185,7 @@ class ChatPage(BasePage):
         return plot
 
     def on_register_events(self):
+
         if getattr(flowsettings, "KH_FEATURE_CHAT_SUGGESTION", False):
             self.state_follow_up = self.chat_control.chat_suggestion.example
         else:
@@ -569,6 +572,12 @@ class ChatPage(BasePage):
             inputs=[self.chat_control.cb_is_public, self.chat_control.conversation],
             outputs=None,
             show_progress="hidden",
+        )
+
+        self.promptlib.prompt.change(
+            fn=self.promptlib.on_prompt_selected,
+            inputs=[self.promptlib.prompt, self.chat_panel.text_input],
+            outputs=[self.promptlib.prompt, self.chat_panel.text_input],
         )
 
         self.report_issue.report_btn.click(

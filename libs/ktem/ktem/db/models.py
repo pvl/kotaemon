@@ -28,6 +28,12 @@ _base_issue_report = (
     else base_models.BaseIssueReport
 )
 
+_base_prompt = (
+    import_dotted_string(settings.KH_TABLE_PROMPT, safe=False)
+    if hasattr(settings, "KH_TABLE_PROMPT")
+    else base_models.BasePrompt
+)
+
 
 class Conversation(_base_conv, table=True):  # type: ignore
     """Conversation record"""
@@ -43,6 +49,10 @@ class Settings(_base_settings, table=True):  # type: ignore
 
 class IssueReport(_base_issue_report, table=True):  # type: ignore
     """Record of issues"""
+
+
+class Prompt(_base_prompt, table=True):  # type: ignore
+    """Prompt table"""
 
 
 if not getattr(settings, "KH_ENABLE_ALEMBIC", False):

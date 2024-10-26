@@ -95,3 +95,21 @@ class BaseIssueReport(SQLModel):
     chat: Optional[dict] = Field(default=None, sa_column=Column(JSON))
     settings: Optional[dict] = Field(default=None, sa_column=Column(JSON))
     user: Optional[int] = Field(default=None)
+
+
+class BasePrompt(SQLModel):
+    """Store user prompts
+
+    Attributes:
+        id: canonical id to identify the prompt
+        user: the id of the user
+        title: the short title for the prompt
+        text: the prompt text
+    """
+
+    __table_args__ = {"extend_existing": True}
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user: int = Field(default=0)
+    title: str
+    text: str
